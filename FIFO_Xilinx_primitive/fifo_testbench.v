@@ -3,167 +3,218 @@
 module fifo_testbench();
 
 reg ACLK;
-reg BCLK;
 reg ARESETN;
-reg [31:0] DOU;
-reg fifo_dat_wr_ready;
-reg fifo_dat_rd_ready;
-wire [31:0] DIN;
-wire [11:0] WRCOUNT;
-wire [11:0] RDCOUNT;
+reg [31:0] DOU0;
+reg [31:0] DOU1;
+reg fifo_dat_wr_ready0;
+reg fifo_dat_rd_ready0;
+reg fifo_dat_wr_ready1;
+reg fifo_dat_rd_ready1;
+wire [31:0] DIN0;
+wire [31:0] DIN1;
 
-initial begin
-  ACLK = 1'b1;
-  BCLK = 1'b1;
-  ARESETN = 1'b0;
-end
+initial
+  ACLK = 1'b0;
   
-always begin 
-  #2.5 ACLK = ~ACLK;
-  #2.5 BCLK = ~BCLK;
-end
+always
+  #5 ACLK = ~ACLK;
 
 initial begin
 
 //reset module
   ARESETN = 1'b0;
-  DOU = 32'h00000000;
-  fifo_dat_wr_ready = 1'b0;
-  fifo_dat_rd_ready = 1'b0;
+  DOU0 = 32'h00000000;
+  fifo_dat_wr_ready0 = 1'b0;
+  fifo_dat_rd_ready0 = 1'b0;
   repeat (12) @(posedge ACLK);
 
-  #1;
   ARESETN = 1'b1;
   repeat (12) @(posedge ACLK);
 
 //write data
-  DOU = 32'h2345678A;
+  DOU0 = 32'h2345678A;
   repeat (1) @(posedge ACLK);
 
-  fifo_dat_wr_ready = 1'b1;
+  fifo_dat_wr_ready0 = 1'b1;
   repeat (1) @(posedge ACLK);
 
-  fifo_dat_wr_ready = 1'b0;
-  DOU = 32'hABBDEF6C;
+  fifo_dat_wr_ready0 = 1'b0;
+  DOU0 = 32'hABBDEF6C;
   repeat (1) @(posedge ACLK);
 
-  fifo_dat_wr_ready = 1'b1;
+  fifo_dat_wr_ready0 = 1'b1;
   repeat (1) @(posedge ACLK);
 
-  fifo_dat_wr_ready = 1'b0;
-  DOU = 32'h8876543E;
+  fifo_dat_wr_ready0 = 1'b0;
+  DOU0 = 32'h8876543E;
   repeat (1) @(posedge ACLK);
 
-  fifo_dat_wr_ready = 1'b1;
+  fifo_dat_wr_ready0 = 1'b1;
   repeat (1) @(posedge ACLK);
 
-  fifo_dat_wr_ready = 1'b0;
-  DOU = 32'h10FEDCB1;
+  fifo_dat_wr_ready0 = 1'b0;
+  DOU0 = 32'h10FEDCB1;
   repeat (1) @(posedge ACLK);
 
-  fifo_dat_wr_ready = 1'b1;
+  fifo_dat_wr_ready0 = 1'b1;
   repeat (1) @(posedge ACLK);
   
-  fifo_dat_wr_ready = 1'b0;
-  DOU = 32'h12345678;
+  fifo_dat_wr_ready0 = 1'b0;
+  DOU0 = 32'h12345678;
   repeat (1) @(posedge ACLK);
 
-  fifo_dat_wr_ready = 1'b1;
+  fifo_dat_wr_ready0 = 1'b1;
   repeat (1) @(posedge ACLK);
 
-  fifo_dat_wr_ready = 1'b0;
-  DOU = 32'h23456789;
+  fifo_dat_wr_ready0 = 1'b0;
+  DOU0 = 32'h23456789;
   repeat (1) @(posedge ACLK);
 
-  fifo_dat_wr_ready = 1'b1;
+  fifo_dat_wr_ready0 = 1'b1;
   repeat (1) @(posedge ACLK);
 
-  fifo_dat_wr_ready = 1'b0;
-  DOU = 32'h3456789A;
+  fifo_dat_wr_ready0 = 1'b0;
+  DOU0 = 32'h3456789A;
   repeat (1) @(posedge ACLK);
 
-  fifo_dat_wr_ready = 1'b1;
+  fifo_dat_wr_ready0 = 1'b1;
   repeat (1) @(posedge ACLK);
 
-  fifo_dat_wr_ready = 1'b0;
-  DOU = 32'h456789AB;
+  fifo_dat_wr_ready0 = 1'b0;
+  DOU0 = 32'h456789AB;
   repeat (1) @(posedge ACLK);
 
-  fifo_dat_wr_ready = 1'b1;
-  fifo_dat_rd_ready = 1'b1;
+  fifo_dat_wr_ready0 = 1'b1;
+  fifo_dat_rd_ready0 = 1'b1;
   repeat (1) @(posedge ACLK);
 
-  fifo_dat_wr_ready = 1'b0;
-  DOU = 32'h56789ABC;
+  fifo_dat_wr_ready0 = 1'b0;
+  DOU0 = 32'h56789ABC;
   repeat (1) @(posedge ACLK);
 
-  fifo_dat_wr_ready = 1'b1;
+  fifo_dat_wr_ready0 = 1'b1;
   repeat (1) @(posedge ACLK);
 
-  fifo_dat_wr_ready = 1'b0;
-  DOU = 32'h6789ABCD;
+  fifo_dat_wr_ready0 = 1'b0;
+  DOU0 = 32'h6789ABCD;
   repeat (1) @(posedge ACLK);
 
-  fifo_dat_wr_ready = 1'b1;
+  fifo_dat_wr_ready0 = 1'b1;
   repeat (1) @(posedge ACLK);
 
-  fifo_dat_wr_ready = 1'b0;
-  DOU = 32'h789ABCDE;
+  fifo_dat_wr_ready0 = 1'b0;
+  DOU0 = 32'h789ABCDE;
   repeat (1) @(posedge ACLK);
 
-  fifo_dat_wr_ready = 1'b1;
+  fifo_dat_wr_ready0 = 1'b1;
   repeat (1) @(posedge ACLK);
   
-  fifo_dat_wr_ready = 1'b0;
-  DOU = 32'h89ABCDEF;
+  fifo_dat_wr_ready0 = 1'b0;
+  DOU0 = 32'h89ABCDEF;
   repeat (1) @(posedge ACLK);
 
-  fifo_dat_wr_ready = 1'b1;
+  fifo_dat_wr_ready0 = 1'b1;
   repeat (1) @(posedge ACLK);
 
-  fifo_dat_wr_ready = 1'b0;
-  DOU = 32'h9ABCDEF1;
+  fifo_dat_wr_ready0 = 1'b0;
+  DOU0 = 32'h9ABCDEF1;
   repeat (1) @(posedge ACLK);
 
-  fifo_dat_wr_ready = 1'b1;
+  fifo_dat_wr_ready0 = 1'b1;
   repeat (1) @(posedge ACLK);
 
-  fifo_dat_wr_ready = 1'b0;
-  DOU = 32'hABCDEF12;
+  fifo_dat_wr_ready0 = 1'b0;
+  DOU0 = 32'hABCDEF12;
   repeat (1) @(posedge ACLK);
 
-  fifo_dat_wr_ready = 1'b1;
+  fifo_dat_wr_ready0 = 1'b1;
   repeat (1) @(posedge ACLK);
 
-  fifo_dat_wr_ready = 1'b0;
-  DOU = 32'hBCDEF123;
+  fifo_dat_wr_ready0 = 1'b0;
+  DOU0 = 32'hBCDEF123;
   repeat (1) @(posedge ACLK);
 
-  fifo_dat_wr_ready = 1'b1;
+  fifo_dat_wr_ready0 = 1'b1;
   repeat (1) @(posedge ACLK);
 //end write
-  fifo_dat_wr_ready = 1'b0;
-  DOU = 32'h00000000;
+  fifo_dat_wr_ready0 = 1'b0;
+  DOU0 = 32'h00000000;
   repeat (5) @(posedge ACLK);
 
 //end read data
   repeat (10) @(posedge ACLK);
-  fifo_dat_rd_ready = 1'b0;
+  fifo_dat_rd_ready0 = 1'b0;
   repeat (10) @(posedge ACLK);
+  
+end
+
+initial begin
+  
+  DOU1 = 32'h00000000;
+  fifo_dat_wr_ready1 = 1'b0;
+  fifo_dat_rd_ready1 = 1'b0;
+  repeat (24) @(posedge ACLK);
+  
+//write data
+  DOU1 = 32'h01234567;
+  repeat (2) @(posedge ACLK);
+
+  fifo_dat_wr_ready1 = 1'b1;
+  repeat (2) @(posedge ACLK);
+
+  DOU1 = 32'h12345678;
+  repeat (2) @(posedge ACLK);
+  DOU1 = 32'h23456789;
+  repeat (2) @(posedge ACLK);
+  DOU1 = 32'h3456789A;
+  repeat (2) @(posedge ACLK);
+  DOU1 = 32'h456789AB;
+  repeat (2) @(posedge ACLK);
+  DOU1 = 32'h56789ABC;
+  repeat (2) @(posedge ACLK);
+  DOU1 = 32'h6789ABCD;
+  repeat (2) @(posedge ACLK);
+  DOU1 = 32'h789ABCDE;
+  repeat (2) @(posedge ACLK);
+  DOU1 = 32'h89ABCDEF;
+  repeat (2) @(posedge ACLK);
+  DOU1 = 32'hFEDCBA98;
+  repeat (2) @(posedge ACLK);
+  DOU1 = 32'hEDCBA987;
+  repeat (2) @(posedge ACLK);
+  DOU1 = 32'hDCBA9876;
+  repeat (2) @(posedge ACLK);
+  DOU1 = 32'hCBA98765;
+  repeat (2) @(posedge ACLK);
+  DOU1 = 32'hBA987654;
+  repeat (2) @(posedge ACLK);
+  DOU1 = 32'hA9876543;
+  repeat (2) @(posedge ACLK);
+  DOU1 = 32'h98765432;
+  repeat (2) @(posedge ACLK);
+  
+  DOU1 = 32'h00000000;
+  fifo_dat_wr_ready1 = 1'b0;
+  fifo_dat_rd_ready1 = 1'b1;
+  repeat (16) @(posedge ACLK);
+  fifo_dat_rd_ready1 = 1'b0;
+
+  repeat (5) @(posedge ACLK);
   
   $finish;
 end
 
 fifo18Kb fifo18Kb_inst
        (.aclk(ACLK),
-        .bclk(BCLK),
         .rst(ARESETN),
-        .din(DOU),
-        .dou(DIN),
-        .rden(fifo_dat_rd_ready),
-        .wren(fifo_dat_wr_ready),
-        .wrcount(WRCOUNT),
-        .rdcount(RDCOUNT)
+        .din0(DOU0),
+        .dou0(DIN0),
+        .rden0(fifo_dat_rd_ready0),
+        .wren0(fifo_dat_wr_ready0),
+        .din1(DOU1),
+        .dou1(DIN1),
+        .rden1(fifo_dat_rd_ready1),
+        .wren1(fifo_dat_wr_ready1)
         );
 
 
