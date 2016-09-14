@@ -1,8 +1,8 @@
 `timescale 1ns / 1ps
 
-
 module fifo18Kb(
-    input clk,
+    input aclk,
+    input bclk,
     input rst,
     input [31:0] din,
     output [31:0] dou,
@@ -11,14 +11,14 @@ module fifo18Kb(
     output [11:0] wrcount,
     output [11:0] rdcount
     );
-    
-  
+
   wire [3:0] dip;
   wire [3:0] dop;
   wire parity_out0;
   wire parity_out1;
   wire parity_out2;
   wire parity_out3;
+  wire sd_clk;
 
 assign parity_out0 = din[0] ^ din[1] ^ din[2] ^ din[3] ^ din[4] ^ din[5] ^ din[6] ^ din[7];
 assign parity_out1 = din[8] ^ din[9] ^ din[10] ^ din[11] ^ din[12] ^ din[13] ^ din[14] ^ din[15];
@@ -26,6 +26,13 @@ assign parity_out2 = din[16] ^ din[17] ^ din[18] ^ din[19] ^ din[20] ^ din[21] ^
 assign parity_out3 = din[24] ^ din[25] ^ din[26] ^ din[27] ^ din[28] ^ din[29] ^ din[30] ^ din[31];
 
 assign dip = {parity_out0,parity_out1,parity_out2,parity_out3};
+  
+  clock_div clock_div_inst(
+  .axi_clk(aclk),
+//  .reset(rst),
+  .div_clk(sd_clk)
+  );
+  
   
   FIFO18E1 #(
   .ALMOST_EMPTY_OFFSET(13'h000A),    // Sets the almost empty threshold
@@ -53,13 +60,13 @@ assign dip = {parity_out0,parity_out1,parity_out2,parity_out3};
   .WRCOUNT(wrcount),                      // 12-bit output: Write count
   .WRERR(WRERR),                          // 1-bit output: Write error
   // Read Control Signals: 1-bit (each) input: Read clock, enable and reset input signals
-  .RDCLK(clk),                            // 1-bit input: Read clock
+  .RDCLK(sd_clk),                         // 1-bit input: Read clock
   .RDEN(rden),                            // 1-bit input: Read enable
   .REGCE(1),                              // 1-bit input: Clock enable
   .RST(!rst),                             // 1-bit input: Asynchronous Reset
   .RSTREG(!rst),                          // 1-bit input: Output register set/reset
   // Write Control Signals: 1-bit (each) input: Write clock and enable input signals
-  .WRCLK(clk),                            // 1-bit input: Write clock
+  .WRCLK(aclk),                            // 1-bit input: Write clock
   .WREN(wren),                            // 1-bit input: Write enable
   // Write Data: 32-bit (each) input: Write input data
   .DI(din),                               // 32-bit input: Data input

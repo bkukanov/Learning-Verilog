@@ -3,6 +3,7 @@
 module fifo_testbench();
 
 reg ACLK;
+reg BCLK;
 reg ARESETN;
 reg [31:0] DOU;
 reg fifo_dat_wr_ready;
@@ -12,10 +13,14 @@ wire [11:0] WRCOUNT;
 wire [11:0] RDCOUNT;
 
 initial begin
-  ACLK = 1'b0;
-  forever begin
-    ACLK = #5 ~ACLK;
-  end
+  ACLK = 1'b1;
+  BCLK = 1'b1;
+  ARESETN = 1'b0;
+end
+  
+always begin 
+  #2.5 ACLK = ~ACLK;
+  #2.5 BCLK = ~BCLK;
 end
 
 initial begin
@@ -25,11 +30,11 @@ initial begin
   DOU = 32'h00000000;
   fifo_dat_wr_ready = 1'b0;
   fifo_dat_rd_ready = 1'b0;
-  repeat (5) @(posedge ACLK);
+  repeat (12) @(posedge ACLK);
 
   #1;
   ARESETN = 1'b1;
-  repeat (5) @(posedge ACLK);
+  repeat (12) @(posedge ACLK);
 
 //write data
   DOU = 32'h2345678A;
@@ -85,6 +90,7 @@ initial begin
   repeat (1) @(posedge ACLK);
 
   fifo_dat_wr_ready = 1'b1;
+  fifo_dat_rd_ready = 1'b1;
   repeat (1) @(posedge ACLK);
 
   fifo_dat_wr_ready = 1'b0;
@@ -135,26 +141,22 @@ initial begin
 
   fifo_dat_wr_ready = 1'b1;
   repeat (1) @(posedge ACLK);
-
-
-
 //end write
   fifo_dat_wr_ready = 1'b0;
   DOU = 32'h00000000;
   repeat (5) @(posedge ACLK);
 
-//read data
-  fifo_dat_rd_ready = 1'b1;
-  repeat (15) @(posedge ACLK);
+//end read data
+  repeat (10) @(posedge ACLK);
   fifo_dat_rd_ready = 1'b0;
-
   repeat (10) @(posedge ACLK);
   
   $finish;
 end
 
 fifo18Kb fifo18Kb_inst
-       (.clk(ACLK),
+       (.aclk(ACLK),
+        .bclk(BCLK),
         .rst(ARESETN),
         .din(DOU),
         .dou(DIN),
