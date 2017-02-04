@@ -1,2 +1,2 @@
-# Learning-Verilog
-In this repository I'll keep my education scetches 
+# Verilog-Learning
+Repository keeps useful ip cores or modules that I've used in practice
