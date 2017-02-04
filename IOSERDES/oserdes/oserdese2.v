@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 
-module oserdese2 (
+module oserdes (
 //    parameter data_rate_oq = "SDR",
 //    parameter data_rate_tq = "SDR",
 //    parameter serdes_mode  = "MASTER"

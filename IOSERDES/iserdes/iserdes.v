@@ -39,7 +39,7 @@ ISERDESE2 #(
     .INIT_Q8(1'b0),
     .INTERFACE_TYPE("NETWORKING"),      // MEMORY, MEMORY_DDR3, MEMORY_QDR, NETWORKING, OVERSAMPLE
     .IOBDELAY("NONE"),              // NONE, BOTH, IBUF, IFD
-    .NUM_CE(2),                     // Number of clock enables (1,2)
+    .NUM_CE(1),                     // Number of clock enables (1,2)
     .OFB_USED("FALSE"),             // Select OFB path (FALSE, TRUE)
     .SERDES_MODE("MASTER"),         // MASTER, SLAVE
     // SRVAL_Q1 - SRVAL_Q4: Q output values when SR is used (0/1)
@@ -66,7 +66,7 @@ ISERDESE2_inst(
     // SHIFTOUT1, SHIFTOUT2: 1-bit (each) output: Data width expansion output ports
     .SHIFTOUT1(SHIFTOUT1),
     .SHIFTOUT2(SHIFTOUT2),
-    .BITSLIP(BITSLIP),
+    .BITSLIP(1'b0),
                         // 1-bit input: The BITSLIP pin performs a Bitslip operation synchronous to
                         // CLKDIV when asserted (active High). Subsequently, the data seen on the Q1
                         // to Q8 output ports will shift, as in a barrel-shifter operation, one
@@ -78,9 +78,9 @@ ISERDESE2_inst(
     .CLKDIVP(CLKDIVP),  // 1-bit input: TBD
     // Clocks: 1-bit (each) input: ISERDESE2 clock input ports
     .CLK(clk),          // 1-bit input: High-speed clock
-    .CLKB(!clk),        // 1-bit input: High-speed secondary clock
+    .CLKB(~clk),        // 1-bit input: High-speed secondary clock
     .CLKDIV(clkdiv),    // 1-bit input: Divided clock
-    .OCLK(OCLK),        // 1-bit input: High speed output clock used when INTERFACE_TYPE="MEMORY"
+    .OCLK(0),        // 1-bit input: High speed output clock used when INTERFACE_TYPE="MEMORY"
     // Dynamic Clock Inversions: 1-bit (each) input: Dynamic clock inversion pins to switch clock polarity
     .DYNCLKDIVSEL(DYNCLKDIVSEL),    // 1-bit input: Dynamic CLKDIV inversion
     .DYNCLKSEL(DYNCLKSEL),          // 1-bit input: Dynamic CLK/CLKB inversion
@@ -88,7 +88,7 @@ ISERDESE2_inst(
     .D(d),              // 1-bit input: Data input
     .DDLY(DDLY),        // 1-bit input: Serial data from IDELAYE2
     .OFB(ofb),          // 1-bit input: Data feedback from OSERDESE2
-    .OCLKB(OCLKB),      // 1-bit input: High speed negative edge output clock
+    .OCLKB(0),      // 1-bit input: High speed negative edge output clock
     .RST(rst),          // 1-bit input: Active high asynchronous reset
     // SHIFTIN1, SHIFTIN2: 1-bit (each) input: Data width expansion input ports
     .SHIFTIN1(SHIFTIN1),

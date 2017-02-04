@@ -74,19 +74,12 @@ initial begin
   $finish;
 end
 
-design_1_wrapper design_1_wrapper_i(
+test test_i(
   .clk    (ACLK),
   .clkdiv (ACLK_div),
   .rst  (ARESETN),
   .oce  (oce),
-  .d1   (d[0]),
-  .d2   (d[1]),
-  .d3   (d[2]),
-  .d4   (d[3]),
-  .d5   (d[4]),
-  .d6   (d[5]),
-  .d7   (d[6]),
-  .d8   (d[7])
+  .d   (d)
 );
 
 endmodule
