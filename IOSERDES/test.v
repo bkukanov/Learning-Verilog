@@ -1,4 +1,4 @@
-`timescale 1ns / 1ps
+`timescale 1ps / 1ps
 //////////////////////////////////////////////////////////////////////////////////
 // Company: 
 // Engineer: 
@@ -35,7 +35,7 @@ module test(
     iserdes iserdes_i(
         .d(out),
         .ofb(outb),
-        .clk(clk),
+        .clk(~clk),
         .clkdiv(clkdiv),
         .ce1(1'b1),
         .ce2(1'b1),

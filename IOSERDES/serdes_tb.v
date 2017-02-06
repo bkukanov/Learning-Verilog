@@ -1,4 +1,4 @@
-`timescale 1 ns / 1 ps
+`timescale 1 ps / 1 ps
 //////////////////////////////////////////////////////////////////////////////////
 // Company: 
 // Engineer: 
@@ -29,18 +29,23 @@ reg oce;
 reg [7:0]d;
 
 initial begin
-  ACLK = 1'b0;
-  forever begin
-    ACLK = #5 ~ACLK;
+  ACLK = 1'b1;
+  ACLK_div = 1'b1;
   end
-end
+//  forever begin
+//    #5 ACLK = ~ACLK;
+//    #40 ACLK_div = ~ACLK_div;
+//  end
+//end
+always #500 ACLK = ~ACLK;
+always #4000 ACLK_div = ~ACLK_div;
 
-initial begin
-    ACLK_div = 1'b0;
-    forever begin
-      ACLK_div = #20 ~ACLK_div;
-    end
-end
+//initial begin
+//    ACLK_div = 1'b0;
+//    forever begin
+      
+//    end
+//end
 
 initial begin
   ARESETN = 1'b1;
@@ -53,12 +58,18 @@ initial begin
   repeat (30) @(posedge ACLK);
 
   oce = 1'b1;
-  repeat (1) @(posedge ACLK_div);
-  d = 8'h0f;
-
-  repeat (1) @(posedge ACLK_div);
-  d = 8'h05;
-
+  repeat (30) begin @(posedge ACLK_div)
+  d = 8'h0E;
+    end
+  repeat (1) begin @(posedge ACLK_div);
+  d = 8'h00;
+ end
+   repeat (2) begin @(posedge ACLK_div);
+ d = 8'hFF;
+end
+  repeat (1) begin @(posedge ACLK_div);
+d = 8'h00;
+end
   repeat (1) @(posedge ACLK_div);
   d = 8'h06;
 
@@ -67,7 +78,14 @@ initial begin
   
   repeat (1) @(posedge ACLK_div);
   d = 8'h00;
-  
+  repeat (1) @(posedge ACLK_div);
+  d = 8'h11;
+  repeat (1) @(posedge ACLK_div);
+  d = 8'hAA;
+  repeat (1) @(posedge ACLK_div);
+  d = 8'hBB;
+  repeat (1) @(posedge ACLK_div);
+  d = 8'h00;        
   repeat (4) @(posedge ACLK_div);
   
   repeat (200) @(posedge ACLK);

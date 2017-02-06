@@ -1,4 +1,4 @@
-`timescale 1ns / 1ps
+`timescale 1ps / 1ps
 
 module iserdes (
 //    parameter DATA_RATE = "SDR",
@@ -6,14 +6,7 @@ module iserdes (
 //    parameter integer DATA_WIDTH = 4 
 //)
 //(
- output wire q1,
- output wire q2,
- output wire q3,
- output wire q4,
- output wire q5,
- output wire q6,
- output wire q7,
- output wire q8,
+ output wire [7:0] q,
  input  wire d,
  input  wire ofb,
  input  wire ce1,
@@ -22,10 +15,58 @@ module iserdes (
  input  wire clkdiv,
  input  wire rst
 );
+reg bitslip;
+reg [3:0] count;
+reg flag;
+always @(posedge clkdiv )
+    begin
+        if (rst) begin
+            bitslip <= 0;
+            count <= 0;
+            flag <= 1;
+        end
+        else if ((q != 0) && (q != 8'h0E) && flag) begin
+            count <= count + 1;
+            case ( count )
+                    4'h0: begin 
+                            bitslip = 1'b1;
+                          end
+                    4'h1: begin
+                            bitslip = 1'b0;
+                          end  
+                    4'h2: begin
+                            bitslip = 1'b1;
+                          end           
+                    4'h3: begin
+                            bitslip = 1'b0;
+                          end  
+                    4'h4: begin
+                              bitslip = 1'b1;
+                            end           
+                    4'h5: begin
+                          bitslip = 1'b0;
+                        end      
+                    4'h6: begin
+                                  bitslip = 1'b1;
+                                end           
+                        4'h7: begin
+                              bitslip = 1'b0;
+                              count <= 0;
+                            end                                                 
+                    default: begin
+                            bitslip = 0;
+                            end
+            endcase 
+        end
+        else if (q != 0) begin
+            bitslip = 0;
+            flag <= 0;
+            end
+    end
 
 ISERDESE2 #(
     .DATA_RATE("SDR"),              // DDR, SDR
-    .DATA_WIDTH(4),                 // Parallel data width (2-8,10,14)
+    .DATA_WIDTH(8),                 // Parallel data width (2-8,10,14)
     .DYN_CLKDIV_INV_EN("FALSE"),    // Enable DYNCLKDIVINVSEL inversion (FALSE, TRUE)
     .DYN_CLK_INV_EN("FALSE"),       // Enable DYNCLKINVSEL inversion (FALSE, TRUE)
     // INIT_Q1 - INIT_Q4: Initial value on the Q outputs (0/1)
@@ -53,20 +94,20 @@ ISERDESE2 #(
     .SRVAL_Q8(1'b0)
 )
 ISERDESE2_inst(
-    .O(O),                          // 1-bit output: Combinatorial output
+    .O(outp),                          // 1-bit output: Combinatorial output
     // Q1 - Q8: 1-bit (each) output: Registered data outputs
-    .Q1(q1),
-    .Q2(q2),
-    .Q3(q3),
-    .Q4(q4),
-    .Q5(q5),
-    .Q6(q6),
-    .Q7(q7),
-    .Q8(q8),
+    .Q1(q[7]),
+    .Q2(q[6]),
+    .Q3(q[5]),
+    .Q4(q[4]),
+    .Q5(q[3]),
+    .Q6(q[2]),
+    .Q7(q[1]),
+    .Q8(q[0]),
     // SHIFTOUT1, SHIFTOUT2: 1-bit (each) output: Data width expansion output ports
     .SHIFTOUT1(SHIFTOUT1),
     .SHIFTOUT2(SHIFTOUT2),
-    .BITSLIP(1'b0),
+    .BITSLIP(bitslip),
                         // 1-bit input: The BITSLIP pin performs a Bitslip operation synchronous to
                         // CLKDIV when asserted (active High). Subsequently, the data seen on the Q1
                         // to Q8 output ports will shift, as in a barrel-shifter operation, one

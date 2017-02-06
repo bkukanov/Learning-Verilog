@@ -1,4 +1,4 @@
-`timescale 1ns / 1ps
+`timescale 1ps / 1ps
 
 module oserdes (
 //    parameter data_rate_oq = "SDR",
@@ -32,12 +32,12 @@ module oserdes (
 OSERDESE2 #(
     .DATA_RATE_OQ("SDR"),           // DDR, SDR
     .DATA_RATE_TQ("SDR"),           // DDR, BUF, SDR
-    .DATA_WIDTH(4),                 // Parallel data width (2-8,10,14)
-    .INIT_OQ(1'b1),                 // Initial value of OQ output (1'b0,1'b1)
-    .INIT_TQ(1'b1),                 // Initial value of TQ output (1'b0,1'b1)
+    .DATA_WIDTH(8),                 // Parallel data width (2-8,10,14)
+    .INIT_OQ(1'b0),                 // Initial value of OQ output (1'b0,1'b1)
+    .INIT_TQ(1'b0),                 // Initial value of TQ output (1'b0,1'b1)
     .SERDES_MODE("MASTER"),         // MASTER, SLAVE
-    .SRVAL_OQ(1'b1),                // OQ output value when SR is used (1'b0,1'b1)
-    .SRVAL_TQ(1'b1),                // TQ output value when SR is used (1'b0,1'b1)
+    .SRVAL_OQ(1'b0),                // OQ output value when SR is used (1'b0,1'b1)
+    .SRVAL_TQ(1'b0),                // TQ output value when SR is used (1'b0,1'b1)
     .TBYTE_CTL("FALSE"),            // Enable tristate byte operation (FALSE, TRUE)
     .TBYTE_SRC("FALSE"),            // Tristate byte source (FALSE, TRUE)
     .TRISTATE_WIDTH(4)              // 3-state converter width (1,4)
